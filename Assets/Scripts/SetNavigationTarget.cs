@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+
 public class SetNavigationTarget : MonoBehaviour
 {
     [SerializeField]
@@ -33,5 +35,22 @@ public class SetNavigationTarget : MonoBehaviour
             line.SetPositions(path.corners);
             line.enabled = true;
         }
+    }
+
+    // ½ÃÀÛÁö ÁÂÇ¥
+    public void set_source(string xyz)
+    {
+        List<string> coordinate = new List<string>(xyz.Split(','));
+
+        transform.position = new Vector3(float.Parse(coordinate[0]), float.Parse(coordinate[1]), 0);
+    }
+
+
+    // µµÂøÁö ÁÂÇ¥
+    public void set_destination(string xyz)
+    {
+        List<string> coordinate = new List<string>(xyz.Split(','));
+
+        navTargetObject.transform.position = new Vector3(float.Parse(coordinate[0]), float.Parse(coordinate[1]), 39);
     }
 }
