@@ -9,9 +9,12 @@ public class NaviTest : MonoBehaviour
     private Camera topDownCamera;
     [SerializeField]
     private GameObject navTargetObject;
+    [SerializeField]
+    private float playerWalkSpeed = 3.0f; // 플레이어 걷는 속도
 
     private NavMeshPath path;
     private LineRenderer line;
+    private NavMeshAgent agent; // NavMeshAgent 추가
 
     private bool lineToggle = false;
 
@@ -24,6 +27,8 @@ public class NaviTest : MonoBehaviour
     {
         path = new NavMeshPath();
         line = transform.GetComponent<LineRenderer>();
+        agent = GetComponent<NavMeshAgent>(); // NavMeshAgent 컴포넌트 가져오기
+        agent.speed = playerWalkSpeed; // 플레이어의 걷는 속도 설정
     }
 
     private void Update()

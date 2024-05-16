@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
@@ -47,20 +47,20 @@ public class TargetHandler : MonoBehaviour
     }
 
     // 타겟 프리팹을 인스턴스화하고 속성을 설정하는 메서드.
-    private TargetFacade CreateTargetFacade(Target target)
-    {
-        GameObject targetObject = Instantiate(targetObjectPrefab, targetObjectsParentTransforms[target.FloorNumber], false);
-        targetObject.SetActive(true);
-        targetObject.name = $"{target.FloorNumber} - {target.Name}";
-        targetObject.transform.localPosition = target.Position;
-        targetObject.transform.localRotation = Quaternion.Euler(target.Rotation);
+    //private TargetFacade CreateTargetFacade(Target target)
+    //{
+       // GameObject targetObject = Instantiate(targetObjectPrefab, targetObjectsParentTransforms[target.FloorNumber], false);
+        //targetObject.SetActive(true);
+        //targetObject.name = $"{target.FloorNumber} - {target.Name}";
+        //targetObject.transform.localPosition = target.Position;
+        //targetObject.transform.localRotation = Quaternion.Euler(target.Rotation);
 
-        TargetFacade targetData = targetObject.GetComponent<TargetFacade>();
-        targetData.Name = target.Name;
-        targetData.FloorNumber = target.FloorNumber;
+        //TargetFacade targetData = targetObject.GetComponent<TargetFacade>();
+        //targetData.Name = target.Name;
+        //targetData.FloorNumber = target.FloorNumber;
 
-        return targetData;
-    }
+        //return targetData;
+    //}
 
     // 드롭다운 UI를 타겟 옵션으로 채우는 메서드.
     private void FillDropdownWithTargetItems()
@@ -93,9 +93,9 @@ public class TargetHandler : MonoBehaviour
     }
 
     // 타겟 텍스트를 기반으로 TargetFacade 객체를 가져오는 메서드.
-    public TargetFacade GetCurrentTargetByTargetText(string targetText)
+    *//*public TargetFacade GetCurrentTargetByTargetText(string targetText)
     {
         return currentTargetItems.Find(x =>
             x.Name.ToLower().Equals(targetText.ToLower()));
-    }
-}
+    }*//*
+}*/
