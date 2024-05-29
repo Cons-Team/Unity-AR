@@ -1,3 +1,6 @@
+// 문수가 작성한 코드 터치 시 이동되는 그런건가? 아무튼
+// 니가 작성한거 아니니까 헷갈리지마 임마..
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

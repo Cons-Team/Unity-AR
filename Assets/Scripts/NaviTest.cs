@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI; // UI를 사용하기 위해 추가
-using TMPro; // 네임스페이스
+using UnityEngine.UI; // UnityEngine.UI 네임스페이스 추가
 
 public class NaviTest : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class NaviTest : MonoBehaviour
     [SerializeField]
     private float playerWalkSpeed = 3.0f; // 플레이어 걷는 속도
     [SerializeField]
-    private TMP_Dropdown destinationDropdown; // UI 추가 목적지 리스트
+    private Dropdown destinationDropdown; // Dropdown UI 추가
 
     private NavMeshPath path;
     private LineRenderer line;
