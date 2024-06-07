@@ -6695,7 +6695,7 @@ GameObject:
   - component: {fileID: 1857641752}
   m_Layer: 0
   m_Name: Indicator
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6858,6 +6858,7 @@ MonoBehaviour:
   navTargetObjects:
   - {fileID: 263638947}
   - {fileID: 587048006}
+  player: {fileID: 1857641748}
 --- !u!1 &1879039599
 GameObject:
   m_ObjectHideFlags: 0

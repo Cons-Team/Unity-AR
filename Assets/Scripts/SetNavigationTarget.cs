@@ -13,6 +13,8 @@ public class SetNavigationTarget : MonoBehaviour
     private TMP_Dropdown targetDropdown;
     [SerializeField]
     private List<GameObject> navTargetObjects; // 여러 네비게이션 목적지 리스트
+    [SerializeField]
+    private GameObject player; // 플레이어 오브젝트의 참조를 받을 변수
 
     private NavMeshPath path;
     private LineRenderer line;
@@ -78,12 +80,28 @@ public class SetNavigationTarget : MonoBehaviour
     private void UpdatePlayerPosition(string coordinate)
     {
         string[] coordinates = coordinate.Split(',');
+        Debug.Log("좌표 크기 : " + coordinates.Length);
         if (coordinates.Length == 3)
         {
-            float x = float.Parse(coordinates[0]);
-            float y = float.Parse(coordinates[1]);
-            float z = float.Parse(coordinates[2]);
-            transform.position = new Vector3(x, y, z);
+            if (
+                float.TryParse(coordinates[0], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float x) &&
+                float.TryParse(coordinates[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float y) &&
+                float.TryParse(coordinates[2], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out float z))
+            {
+                // 플레이어 오브젝트의 위치를 업데이트
+                if (player != null) // 플레이어 오브젝트가 null이 아닌 경우에만 위치를 업데이트
+                    player.transform.position = new Vector3(x, y, z);
+                else
+                    Debug.LogError("플레이어 설정이 안됐습니다.");
+            }
+            else
+            {
+                Debug.LogError("좌표를 구문 분석하지 못했습니다.");
+            }
+        }
+        else
+        {
+            Debug.LogError("잘못된 좌표 형식입니다.");
         }
     }
 }
