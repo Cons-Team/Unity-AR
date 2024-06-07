@@ -1,59 +1,63 @@
-// 문수가 작성한 코드 터치 시 이동되는 그런건가? 아무튼
-// 니가 작성한거 아니니까 헷갈리지마 임마..
-
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
-
-
+using UnityEngine.UI;
 
 public class SetNavigationTarget : MonoBehaviour
 {
     [SerializeField]
     private Camera topDownCamera;
     [SerializeField]
-    private GameObject navTargetObject;
-    
+    private TMP_Dropdown targetDropdown;
+    [SerializeField]
+    private List<GameObject> navTargetObjects;
+
     private NavMeshPath path;
     private LineRenderer line;
-
-    private bool lineToggle = false;
 
     private void Start()
     {
         path = new NavMeshPath();
         line = transform.GetComponent<LineRenderer>();
+
+        // Dropdown 초기화
+        targetDropdown.ClearOptions();
+        List<string> targetNames = new List<string>();
+        foreach (GameObject target in navTargetObjects)
+        {
+            targetNames.Add(target.name);
+        }
+        targetDropdown.AddOptions(targetNames);
+        targetDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
+
+        // 초기 경로 계산
+        if (navTargetObjects.Count > 0)
+        {
+            UpdatePath(navTargetObjects[0].transform.position);
+        }
+    }
+
+    private void OnDropdownValueChanged(int index)
+    {
+        UpdatePath(navTargetObjects[index].transform.position);
+    }
+
+    private void UpdatePath(Vector3 targetPosition)
+    {
+        NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path);
+        line.positionCount = path.corners.Length;
+        line.SetPositions(path.corners);
+        line.enabled = true;
     }
 
     private void Update()
     {
-        if ((Input.touchCount > 0) && (Input.GetTouch(0).phase == TouchPhase.Began)) {
-            lineToggle = !lineToggle;
-        }
-        if (lineToggle)
+        // 현재 위치가 변경되는 경우 경로를 업데이트
+        if (navTargetObjects.Count > 0)
         {
-            NavMesh.CalculatePath(transform.position, navTargetObject.transform.position, NavMesh.AllAreas, path);
-            line.positionCount = path.corners.Length;
-            line.SetPositions(path.corners);
-            line.enabled = true;
+            UpdatePath(navTargetObjects[targetDropdown.value].transform.position);
         }
-    }
-
-    // 시작지 좌표
-    public void set_source(string xyz)
-    {
-        List<string> coordinate = new List<string>(xyz.Split(','));
-
-        transform.position = new Vector3(float.Parse(coordinate[0]), float.Parse(coordinate[1]), 0);
-    }
-
-
-    // 도착지 좌표
-    public void set_destination(string xyz)
-    {
-        List<string> coordinate = new List<string>(xyz.Split(','));
-
-        navTargetObject.transform.position = new Vector3(float.Parse(coordinate[0]), float.Parse(coordinate[1]), 39);
     }
 }

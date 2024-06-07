@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI; // UnityEngine.UI 네임스페이스 추가
@@ -93,4 +93,4 @@ public class NaviTest : MonoBehaviour
             agent.Warp(newPosition); // NavMeshAgent를 새로운 위치로 이동
         }
     }
-}
+}*/
