@@ -12,15 +12,16 @@ public class SetNavigationTarget : MonoBehaviour
     [SerializeField]
     private TMP_Dropdown targetDropdown;
     [SerializeField]
-    private List<GameObject> navTargetObjects;
+    private List<GameObject> navTargetObjects; // 여러 네비게이션 목적지 리스트
 
     private NavMeshPath path;
     private LineRenderer line;
+    private Vector3 lastPosition;
 
     private void Start()
     {
         path = new NavMeshPath();
-        line = transform.GetComponent<LineRenderer>();
+        line = GetComponent<LineRenderer>();
 
         // Dropdown 초기화
         targetDropdown.ClearOptions();
@@ -37,6 +38,12 @@ public class SetNavigationTarget : MonoBehaviour
         {
             UpdatePath(navTargetObjects[0].transform.position);
         }
+
+        // 안드로이드 코드
+        AndroidJavaClass androidJavaClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject androidJavaObject = androidJavaClass.GetStatic<AndroidJavaObject>("currentActivity");
+        string coordinate = androidJavaObject.Call<string>("GetCoordinate");
+        UpdatePlayerPosition(coordinate);
     }
 
     private void OnDropdownValueChanged(int index)
@@ -47,17 +54,36 @@ public class SetNavigationTarget : MonoBehaviour
     private void UpdatePath(Vector3 targetPosition)
     {
         NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path);
-        line.positionCount = path.corners.Length;
-        line.SetPositions(path.corners);
-        line.enabled = true;
+        if (path.status == NavMeshPathStatus.PathComplete)
+        {
+            line.positionCount = path.corners.Length;
+            line.SetPositions(path.corners);
+            line.enabled = true;
+        }
     }
 
     private void Update()
     {
-        // 현재 위치가 변경되는 경우 경로를 업데이트
         if (navTargetObjects.Count > 0)
         {
-            UpdatePath(navTargetObjects[targetDropdown.value].transform.position);
+            if (Vector3.Distance(transform.position, lastPosition) > 0.1f)
+            {
+                lastPosition = transform.position;
+                UpdatePath(navTargetObjects[targetDropdown.value].transform.position);
+            }
+        }
+    }
+
+    // 받은 좌표에 따라 플레이어의 위치를 업데이트하는 메서드
+    private void UpdatePlayerPosition(string coordinate)
+    {
+        string[] coordinates = coordinate.Split(',');
+        if (coordinates.Length == 3)
+        {
+            float x = float.Parse(coordinates[0]);
+            float y = float.Parse(coordinates[1]);
+            float z = float.Parse(coordinates[2]);
+            transform.position = new Vector3(x, y, z);
         }
     }
 }
