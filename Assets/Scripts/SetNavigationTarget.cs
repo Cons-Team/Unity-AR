@@ -10,36 +10,43 @@ public class SetNavigationTarget : MonoBehaviour
     [SerializeField]
     private Camera topDownCamera;
     [SerializeField]
-    private TMP_Dropdown targetDropdown;
+    private TMP_InputField mainSearchField;
+    [SerializeField]
+    private GameObject modalPanel;
+    [SerializeField]
+    private TMP_InputField modalSearchField;
+    [SerializeField]
+    private GameObject modalSuggestionPanel;
+    [SerializeField]
+    private GameObject suggestionButtonPrefab;
     [SerializeField]
     private List<GameObject> navTargetObjects; // 여러 네비게이션 목적지 리스트
     [SerializeField]
     private GameObject player; // 플레이어 오브젝트의 참조를 받을 변수
+    [SerializeField]
+    private Button searchbtn; // 모달 패널을 보이게 하는 버튼
 
     private NavMeshPath path;
     private LineRenderer line;
     private Vector3 lastPosition;
+    private List<GameObject> suggestionButtons = new List<GameObject>();
 
     private void Start()
     {
         path = new NavMeshPath();
         line = GetComponent<LineRenderer>();
 
-        // Dropdown 초기화
-        targetDropdown.ClearOptions();
-        List<string> targetNames = new List<string>();
-        foreach (GameObject target in navTargetObjects)
-        {
-            targetNames.Add(target.name);
-        }
-        targetDropdown.AddOptions(targetNames);
-        targetDropdown.onValueChanged.AddListener(OnDropdownValueChanged);
-
         // 초기 경로 계산
         if (navTargetObjects.Count > 0)
         {
             UpdatePath(navTargetObjects[0].transform.position);
         }
+
+        // 모달 창 버튼에 이벤트 리스너 추가
+        searchbtn.onClick.AddListener(OpenModal);
+
+        // 모달 검색 필드에 이벤트 리스너 추가
+        modalSearchField.onValueChanged.AddListener(OnModalSearchValueChanged);
 
         // 안드로이드 코드
         AndroidJavaClass androidJavaClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -48,9 +55,50 @@ public class SetNavigationTarget : MonoBehaviour
         UpdatePlayerPosition(coordinate);
     }
 
-    private void OnDropdownValueChanged(int index)
+    private void OpenModal()
     {
-        UpdatePath(navTargetObjects[index].transform.position);
+        modalPanel.SetActive(true);
+        modalSearchField.text = "";
+        UpdateSuggestions("");
+    }
+
+    private void CloseModal()
+    {
+        modalPanel.SetActive(false);
+    }
+
+    private void OnModalSearchValueChanged(string searchText)
+    {
+        UpdateSuggestions(searchText);
+    }
+
+    private void UpdateSuggestions(string searchText)
+    {
+        // 이전에 생성된 제안 버튼 제거
+        foreach (GameObject button in suggestionButtons)
+        {
+            Destroy(button);
+        }
+        suggestionButtons.Clear();
+
+        // 검색어와 일치하는 제안 생성
+        foreach (GameObject target in navTargetObjects)
+        {
+            if (target.name.ToLower().Contains(searchText.ToLower()))
+            {
+                GameObject suggestionButton = Instantiate(suggestionButtonPrefab, modalSuggestionPanel.transform);
+                suggestionButton.GetComponentInChildren<TextMeshProUGUI>().text = target.name;
+                suggestionButton.GetComponent<Button>().onClick.AddListener(() => OnSuggestionSelected(target));
+                suggestionButtons.Add(suggestionButton);
+            }
+        }
+    }
+
+    private void OnSuggestionSelected(GameObject target)
+    {
+        mainSearchField.text = target.name;
+        UpdatePath(target.transform.position);
+        CloseModal();
     }
 
     private void UpdatePath(Vector3 targetPosition)
@@ -71,7 +119,7 @@ public class SetNavigationTarget : MonoBehaviour
             if (Vector3.Distance(transform.position, lastPosition) > 0.1f)
             {
                 lastPosition = transform.position;
-                UpdatePath(navTargetObjects[targetDropdown.value].transform.position);
+                UpdatePath(navTargetObjects[0].transform.position);
             }
         }
     }
