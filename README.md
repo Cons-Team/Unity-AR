@@ -2,9 +2,12 @@
 
 #### 한신대학교 장준하통일관 3층, 4층 기준으로 맵 구현
 <p style="float:left">
-  <img src="https://github.com/user-attachments/assets/f7580a05-7a31-496c-a463-c8cf939a1f02" width="500">
-  <img src="https://github.com/user-attachments/assets/f11f3daa-e47b-4fab-9d1e-1012fb728ad3" width="500">
+  <img src="https://github.com/user-attachments/assets/f7580a05-7a31-496c-a463-c8cf939a1f02" width="300">
+  <img src="https://github.com/user-attachments/assets/f11f3daa-e47b-4fab-9d1e-1012fb728ad3" width="300">
 </p>
+
+# 구현된 앱 화면
+<img src="https://github.com/user-attachments/assets/0b57d7f4-4a50-4b40-b351-23c1b7a6a452" width="300">
 
 # 3층, 4층 구분
     private bool IsOnFirstFloor(Vector3 position)
