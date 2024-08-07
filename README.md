@@ -22,6 +22,7 @@
 
 # 엘리베이터 / 계단에 따른 경로 계산
 #### 기본 설정은 계단
+##### toggle로 했을 경우, 업데이트가 안되는 문제가 발생 -> dropdown으로 할 수 밖에 없었음.
 
     private void UpdatePath(Vector3 targetPosition)
         {
