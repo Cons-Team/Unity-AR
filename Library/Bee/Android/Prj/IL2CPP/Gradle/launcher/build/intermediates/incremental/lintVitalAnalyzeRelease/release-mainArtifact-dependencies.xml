@@ -1,17 +1,17 @@
 <dependencies>
   <compile
-      roots="C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release">
+      roots="C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release">
     <dependency
-        name="C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release"
+        name="C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release"
         simpleName="Gradle:unityLibrary"/>
   </compile>
   <package
-      roots="C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release,__local_aars__:C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified@jar,:arcore_client:@aar,:ARPresto:@aar,:UnityARCore:@aar,:unityandroidpermissions:@aar,C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary:xrmanifest.androidlib::release">
+      roots="C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release,__local_aars__:C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified@jar,:arcore_client:@aar,:ARPresto:@aar,:UnityARCore:@aar,:unityandroidpermissions:@aar,C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary:xrmanifest.androidlib::release">
     <dependency
-        name="C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release"
+        name="C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary::release"
         simpleName="Gradle:unityLibrary"/>
     <dependency
-        name="__local_aars__:C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified@jar"/>
+        name="__local_aars__:C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\libs\unity-classes.jar:unspecified@jar"/>
     <dependency
         name=":arcore_client:@aar"/>
     <dependency
@@ -21,7 +21,7 @@
     <dependency
         name=":unityandroidpermissions:@aar"/>
     <dependency
-        name="C:\Users\namhu\Downloads\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary:xrmanifest.androidlib::release"
+        name="C:\Unity\Unity-AR\Library\Bee\Android\Prj\IL2CPP\Gradle@@:unityLibrary:xrmanifest.androidlib::release"
         simpleName="Gradle.unityLibrary:xrmanifest.androidlib"/>
   </package>
 </dependencies>

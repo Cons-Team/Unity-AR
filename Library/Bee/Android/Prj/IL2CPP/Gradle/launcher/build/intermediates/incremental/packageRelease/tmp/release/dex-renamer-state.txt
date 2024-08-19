@@ -1,4 +1,4 @@
-#Tue Aug 06 12:32:27 KST 2024
-base.0=C\:\\Users\\namhu\\Downloads\\Unity-AR-e387a9387b42382c063a10d561662fa98c88f752\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\launcher\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
+#Mon Aug 19 13:14:51 KST 2024
+base.0=C\:\\Unity\\Unity-AR\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\launcher\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
