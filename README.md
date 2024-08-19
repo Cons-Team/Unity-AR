@@ -1,18 +1,85 @@
 # 유니티로 만든 실내 AR 네비게이션
 
-#### 1. 고정된 현재 위치에서 목적지까지의 네이게이션 표시만 되어있는 상황
+#### 한신대학교 장준하통일관 3층, 4층 기준으로 맵 구현
+<p style="float:left">
+  <img src="https://github.com/user-attachments/assets/f7580a05-7a31-496c-a463-c8cf939a1f02" width="300">
+  <img src="https://github.com/user-attachments/assets/f11f3daa-e47b-4fab-9d1e-1012fb728ad3" width="410">
+</p>
 
-#### 2. 화면 터치 시 시작지랑 목적지 좌표 설정하는 함수 추가 < 사용하지 않음.
+# 구현된 앱 화면
+<img src="https://github.com/user-attachments/assets/0b57d7f4-4a50-4b40-b351-23c1b7a6a452" width="300">
 
-#### 3. 2층 구현되어있고 플레이어 속도 설정 추가
+# 3층, 4층 구분
+    private bool IsOnFirstFloor(Vector3 position)
+    {
+        return position.y < -2.29f; // 예시: Y 좌표가 -2.29 이하인 경우 3층으로 간주
+    }
 
-  ![스크린샷 2024-05-26 222324](https://github.com/Cons-Team/Unity-AR/assets/105468288/a57130a8-561e-4d2e-8db5-cba484c260fa)
+    private bool IsOnSecondFloor(Vector3 position)
+    {
+        return position.y >= 1.2f; // 예시: Y 좌표가 1.2 이상인 경우 4층으로 간주
+    }
 
-#### 4. 목적지 여러개 리스트화 드롭바형식으로 확인가능
+# 엘리베이터 / 계단에 따른 경로 계산
+#### 기본 설정은 계단
+##### toggle로 했을 경우, 업데이트가 안되는 문제가 발생 -> dropdown으로 할 수 밖에 없었음.
 
-#### 5. 비콘으로 부터 받은 좌표로 플레이어 위치 변경 코드 추가
+    private void UpdatePath(Vector3 targetPosition)
+        {
+            if (pathOptionDropdown.value == 1) // 엘리베이터 옵션이 선택된 경우
+            {
+                Vector3 elevatorEntry;
+                Vector3 elevatorExit;
+    
+                if (IsOnFirstFloor(transform.position))
+                {
+                    elevatorEntry = elevatorEntry1F.transform.position;
+                    elevatorExit = elevatorExit2F.transform.position;
+                }
+                else
+                {
+                    elevatorEntry = elevatorEntry2F.transform.position;
+                    elevatorExit = elevatorExit1F.transform.position;
+                }
+    
+                elevatorPathHandler.CalculatePathUsingElevator(transform.position, targetPosition, elevatorEntry, elevatorExit);
+            }
+            else
+            {
+                // 계단을 사용하는 기본 경로 계산
+                NavMeshPath path = new NavMeshPath();
+                NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, path);
+                if (path.corners.Length > 0)
+                {
+                    line.positionCount = path.corners.Length;
+                    line.SetPositions(path.corners);
+                }
+                line.enabled = true;
+            }
+        }
 
-#### 6. UI 추가 ( 2D 전환버튼, 검색 버튼, 취소 버튼, 목적지 타이틀 및 도착 예정 시간은 )
-   ![스크린샷 2024-05-29 150118](https://github.com/Cons-Team/Unity-AR/assets/105468288/59d3d626-e5d5-4280-b971-ea11213f82f3)
-
-#### 7. 엘리베이터 or 계단 선택 가능
+# 엘리베이터 사용 시 경로
+#### y좌표에 따라 엘리베이터 층 구분하고 엘리베이터 출발 지점 도착하면 2초후 도착 지점으로 이동
+#### 그리고 다시 목적지 안내 시작
+    private IEnumerator CalculatePathCoroutine(Vector3 startPosition, Vector3 targetPosition, Vector3 elevatorEntry, Vector3 elevatorExit)
+        {
+            List<Vector3> completePath = new List<Vector3>();
+    
+            // 엘리베이터를 사용하는 경로 계산
+            NavMeshPath pathToElevator = new NavMeshPath();
+            NavMesh.CalculatePath(startPosition, elevatorEntry, NavMesh.AllAreas, pathToElevator);
+            completePath.AddRange(pathToElevator.corners);
+    
+            // 경로 표시
+            UpdateLineRenderer(completePath);
+    
+            yield return new WaitForSeconds(2); // 엘리베이터 이동 시간
+    
+            // 엘리베이터 이동 후 목표 위치까지
+            NavMeshPath pathFromElevator = new NavMeshPath();
+            NavMesh.CalculatePath(elevatorExit, targetPosition, NavMesh.AllAreas, pathFromElevator);
+            completePath.AddRange(pathFromElevator.corners);
+    
+            // 최종 경로 표시
+            UpdateLineRenderer(completePath);
+        }
