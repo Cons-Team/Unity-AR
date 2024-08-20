@@ -101,4 +101,10 @@
             materialColor.a = opacity; // 알파 채널을 사용하여 투명도 조절
             lineRenderer.material.color = materialColor;
         }
+
     }
+
+# 검색기능
+#### 새로운 창 띄우기 + 현재 위치 띄우는 것 까진 됐는데
+#### 자동완성검색 로직이 미완성
+<img src="https://github.com/user-attachments/assets/8a2706af-56f3-4d14-b10a-80d790d79023" width="300">
