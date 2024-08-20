@@ -35,42 +35,11 @@ public class LineRendererController : MonoBehaviour
     public void SetLineOpacity(float opacity)
     {
         lineOpacity = opacity;
-        if (lineRenderer != null)
+        if (lineRenderer != null && lineRenderer.material != null)
         {
-            Color lineColor = lineRenderer.startColor;
-            lineColor.a = opacity;
-            lineRenderer.startColor = lineColor;
-            lineRenderer.endColor = lineColor;
-        }
-    }
-
-    // 라인의 색상을 설정하는 메서드
-    public void SetLineColor(Color color)
-    {
-        if (lineRenderer != null)
-        {
-            color.a = lineOpacity; // 투명도 유지
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
-        }
-    }
-
-    // 라인의 위치를 설정하는 메서드
-    public void SetLinePositions(Vector3[] positions)
-    {
-        if (lineRenderer != null)
-        {
-            lineRenderer.positionCount = positions.Length;
-            lineRenderer.SetPositions(positions);
-        }
-    }
-
-    // 라인을 활성화/비활성화하는 메서드
-    public void SetLineVisibility(bool isVisible)
-    {
-        if (lineRenderer != null)
-        {
-            lineRenderer.enabled = isVisible;
+            Color materialColor = lineRenderer.material.color;
+            materialColor.a = opacity; // 알파 채널을 사용하여 투명도 조절
+            lineRenderer.material.color = materialColor;
         }
     }
 }
