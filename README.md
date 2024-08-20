@@ -85,11 +85,11 @@
         }
 
 # 경로 안내 화살표 렌더러 투명도 조절 기능
+#### 슬라이더를 이용해 투명도 조절
 <p style="float:left">
   <img src="https://github.com/user-attachments/assets/9f7fcb81-ff65-430a-9971-66139cb711be" width="300">
   <img src="https://github.com/user-attachments/assets/b02756ac-04bf-43b0-9232-c592e665be1a" width="300">
 </p>
-#### 슬라이더를 이용해 투명도 조절
 
     // 라인의 투명도를 설정하는 메서드
     public void SetLineOpacity(float opacity)
@@ -106,5 +106,5 @@
 
 # 검색기능
 #### 새로운 창 띄우기 + 현재 위치 띄우는 것 까진 됐는데
-#### 자동완성검색 로직이 미완성
+#### 자동완성검색 로직 + 나기기 버튼 미완성
 <img src="https://github.com/user-attachments/assets/8a2706af-56f3-4d14-b10a-80d790d79023" width="300">
