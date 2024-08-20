@@ -85,46 +85,20 @@
         }
 
 # 경로 안내 화살표 렌더러 투명도 조절 기능
+<p style="float:left">
+  <img src="https://github.com/user-attachments/assets/9f7fcb81-ff65-430a-9971-66139cb711be" width="300">
+  <img src="https://github.com/user-attachments/assets/b02756ac-04bf-43b0-9232-c592e665be1a" width="300">
+</p>
 #### 슬라이더를 이용해 투명도 조절
-    public class LineRendererController : MonoBehaviour
+
+    // 라인의 투명도를 설정하는 메서드
+    public void SetLineOpacity(float opacity)
     {
-        [SerializeField]
-        private LineRenderer lineRenderer;
-    
-        [Range(0, 1)]
-        [SerializeField]
-        private float lineOpacity = 1.0f; // 초기 투명도
-    
-        [SerializeField]
-        private Slider opacitySlider; // 투명도 조절 슬라이더
-    
-        private void Start()
+        lineOpacity = opacity;
+        if (lineRenderer != null && lineRenderer.material != null)
         {
-            if (lineRenderer == null)
-            {
-                lineRenderer = GetComponent<LineRenderer>();
-            }
-    
-            if (opacitySlider != null)
-            {
-                // 슬라이더 초기화 및 리스너 설정
-                opacitySlider.value = lineOpacity;
-                opacitySlider.onValueChanged.AddListener(SetLineOpacity);
-            }
-    
-            // 초기 투명도 설정
-            SetLineOpacity(lineOpacity);
+            Color materialColor = lineRenderer.material.color;
+            materialColor.a = opacity; // 알파 채널을 사용하여 투명도 조절
+            lineRenderer.material.color = materialColor;
         }
-    
-        // 라인의 투명도를 설정하는 메서드
-        public void SetLineOpacity(float opacity)
-        {
-            lineOpacity = opacity;
-            if (lineRenderer != null)
-            {
-                Color lineColor = lineRenderer.startColor;
-                lineColor.a = opacity;
-                lineRenderer.startColor = lineColor;
-                lineRenderer.endColor = lineColor;
-            }
-        }
+    }
