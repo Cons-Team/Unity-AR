@@ -23,6 +23,9 @@ public class SearchWindowManager : MonoBehaviour
     [SerializeField]
     private List<GameObject> navTargetObjects;  // 모든 목적지 오브젝트 목록
 
+    [SerializeField]
+    private PathUpdater pathUpdater;  // 목적지 설정 스크립트 참조
+
     private void Start()
     {
         // 검색 창 닫기
@@ -45,21 +48,29 @@ public class SearchWindowManager : MonoBehaviour
     private void Search()
     {
         string query = searchInputField.text.ToLower();  // 검색어 가져오기
+        Debug.Log($"Searching for: {query}");
         ClearResults();
 
         foreach (GameObject target in navTargetObjects)
         {
-            if (target.name.ToLower().Contains(query))
+            string targetName = target.name.ToLower();
+            Debug.Log($"Checking target: {targetName}");
+
+            if (targetName.Contains(query))
             {
+                Debug.Log($"Match found: {targetName}");
                 GameObject resultItem = Instantiate(resultPrefab, resultsScrollView.content);
                 resultItem.GetComponentInChildren<TextMeshProUGUI>().text = target.name;
 
-                // 결과 항목 클릭 시 목적지 설정
                 resultItem.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     SetTarget(target);
                     CloseSearchWindow();
                 });
+
+                // 추가된 항목의 RectTransform을 로그에 출력
+                RectTransform resultRectTransform = resultItem.GetComponent<RectTransform>();
+                Debug.Log($"Result item RectTransform - Width: {resultRectTransform.rect.width}, Height: {resultRectTransform.rect.height}");
             }
         }
     }
@@ -74,7 +85,13 @@ public class SearchWindowManager : MonoBehaviour
 
     private void SetTarget(GameObject target)
     {
-        // 목표 지점을 설정하는 로직을 여기에 추가합니다.
-        Debug.Log($"Target set to: {target.name}");
+        if (pathUpdater != null)
+        {
+            pathUpdater.SetTargetByObject(target);
+        }
+        else
+        {
+            Debug.LogError("PathUpdater is not assigned in SearchWindowManager.");
+        }
     }
 }

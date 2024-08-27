@@ -111,11 +111,26 @@ public class PathUpdater : MonoBehaviour
 
     private bool IsOnFirstFloor(Vector3 position)
     {
-        return position.y < -2.29f; // 예시: Y 좌표가 1.5 이하인 경우 1층으로 간주
+        return position.y < -2.29f; // 예시: Y 좌표가 -2.29 이상인 경우 3층으로 간주
     }
 
     private bool IsOnSecondFloor(Vector3 position)
     {
-        return position.y >= 1.2f; // 예시: Y 좌표가 1.5 이상인 경우 2층으로 간주
+        return position.y >= 1.2f; // 예시: Y 좌표가 1.2 이상인 경우 4층으로 간주
+    }
+
+    public void SetTargetByObject(GameObject target)
+    {
+        // 목표 지점을 설정하는 로직
+        Debug.Log($"Target set to: {target.name}");
+
+        // 타겟 드롭다운의 인덱스를 찾고 업데이트
+        int index = navTargetObjects.IndexOf(target);
+        if (index >= 0)
+        {
+            targetDropdown.value = index;
+        }
+
+        UpdatePath(target.transform.position);
     }
 }
