@@ -48,29 +48,39 @@ public class SearchWindowManager : MonoBehaviour
     private void Search()
     {
         string query = searchInputField.text.ToLower();  // 검색어 가져오기
-        Debug.Log($"Searching for: {query}");
-        ClearResults();
+        ClearResults();  // 이전 검색 결과 삭제
 
         foreach (GameObject target in navTargetObjects)
         {
-            string targetName = target.name.ToLower();
-            Debug.Log($"Checking target: {targetName}");
-
-            if (targetName.Contains(query))
+            if (target.name.ToLower().Contains(query))
             {
-                Debug.Log($"Match found: {targetName}");
+                // Prefab을 content에 생성하여 자동으로 배치되도록 함
                 GameObject resultItem = Instantiate(resultPrefab, resultsScrollView.content);
-                resultItem.GetComponentInChildren<TextMeshProUGUI>().text = target.name;
+                TextMeshProUGUI resultLabel = resultItem.GetComponentInChildren<TextMeshProUGUI>();
 
-                resultItem.GetComponent<Button>().onClick.AddListener(() =>
+                if (resultLabel != null)
                 {
-                    SetTarget(target);
-                    CloseSearchWindow();
-                });
+                    resultLabel.text = target.name;  // 결과의 텍스트 설정
+                }
+                else
+                {
+                    Debug.LogError("TextMeshProUGUI component is missing in the resultPrefab.");
+                    continue;  // 컴포넌트가 없으면 다음으로 넘어감
+                }
 
-                // 추가된 항목의 RectTransform을 로그에 출력
-                RectTransform resultRectTransform = resultItem.GetComponent<RectTransform>();
-                Debug.Log($"Result item RectTransform - Width: {resultRectTransform.rect.width}, Height: {resultRectTransform.rect.height}");
+                Button resultButton = resultItem.GetComponent<Button>();
+                if (resultButton != null)
+                {
+                    resultButton.onClick.AddListener(() =>
+                    {
+                        SetTarget(target);  // 클릭 시 대상 설정
+                        CloseSearchWindow();  // 창 닫기
+                    });
+                }
+                else
+                {
+                    Debug.LogError("Button component is missing in the resultPrefab.");
+                }
             }
         }
     }

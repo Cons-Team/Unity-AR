@@ -15,8 +15,8 @@ TagManager:
   - 
   - Floor
   - Wall
-  - 
-  - 
+  - 2d
+  - background
   - 
   - 
   - 
@@ -40,4 +40,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: ui
+    uniqueID: 2870110557
     locked: 0

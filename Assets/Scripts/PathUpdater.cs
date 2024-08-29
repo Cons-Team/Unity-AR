@@ -57,7 +57,7 @@ public class PathUpdater : MonoBehaviour
 
         // Path Option Dropdown 초기화
         pathOptionDropdown.ClearOptions();
-        List<string> pathOptions = new List<string> { "Stairs", "Elevator" };
+        List<string> pathOptions = new List<string> { "계단", "엘리베이터" };
         pathOptionDropdown.AddOptions(pathOptions);
         pathOptionDropdown.onValueChanged.AddListener(OnPathOptionDropdownValueChanged);
     }
