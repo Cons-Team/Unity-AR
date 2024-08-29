@@ -104,10 +104,10 @@
 
     }
 
-# 검색기능 (작업중)
-#### 새로운 창 띄우기 + 현재 위치 띄우는 것 까진 됐는데
-#### 자동완성검색 로직 + 나기기 버튼 미완성
+# 검색기능
+#### 검색후 목적지 변경까지 완료
 <img src="https://github.com/user-attachments/assets/8a2706af-56f3-4d14-b10a-80d790d79023" width="300">
+<img src="https://github.com/user-attachments/assets/5643286b-654c-4e34-b10e-73d03a0f516d" width="300">
 
 # 미구현 기능들
 #### 1. 비콘 연동 플레이어 위치 변경
