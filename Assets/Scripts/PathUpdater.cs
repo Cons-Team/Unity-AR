@@ -21,6 +21,7 @@ public class PathUpdater : MonoBehaviour
     private GameObject elevatorExit1F;
     [SerializeField]
     private LineRenderer line;
+    public GameObject indicator; // 플레이어 오브젝트를 지정하는 변수
 
     private ElevatorPathHandler elevatorPathHandler;
 
@@ -39,6 +40,9 @@ public class PathUpdater : MonoBehaviour
         // 초기 경로 계산
         if (navTargetObjects.Count > 0)
         {
+            /** Android에서 좌표 수신 메소드*/
+            GetLocation();
+
             UpdatePath(navTargetObjects[0].transform.position);
         }
     }
@@ -132,5 +136,27 @@ public class PathUpdater : MonoBehaviour
         }
 
         UpdatePath(target.transform.position);
+    }
+
+    /** Android에서 좌표 수신*/
+    public void GetLocation()
+    {
+        /** Android의 GetLocation 메소드로부터 좌표 수신 */
+        AndroidJavaClass ajc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        AndroidJavaObject ajo = ajc.GetStatic<AndroidJavaObject>("currentActivity");
+        string location = ajo.Call<string>("GetLocation");
+
+        string[] locationVector3 = location.Split(',');
+
+        /** Indicator(플레이어) 위치 할당 */
+        indicator.transform.position = new Vector3(float.Parse(locationVector3[0]), float.Parse(locationVector3[1]), float.Parse(locationVector3[2]));
+
+        /** Android에서 Log찍기(좌표 수신 확인용) */
+        ajo.Call("SendToastFromUnity", location);
+
+        /** Android에서 Log찍기(Indicator에 좌표가 저장됐는지 확인용) */
+        string playerLocation = "";
+        playerLocation = indicator.transform.position + "";
+        ajo.Call("SendToastFromUnity", playerLocation);
     }
 }

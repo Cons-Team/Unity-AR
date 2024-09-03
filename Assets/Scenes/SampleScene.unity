@@ -10364,6 +10364,7 @@ MonoBehaviour:
   elevatorEntry2F: {fileID: 1604719042}
   elevatorExit1F: {fileID: 2122739557}
   line: {fileID: 0}
+  indicator: {fileID: 1857641748}
 --- !u!114 &1857641754
 MonoBehaviour:
   m_ObjectHideFlags: 0
