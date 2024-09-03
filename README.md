@@ -110,7 +110,7 @@
 <img src="https://github.com/user-attachments/assets/5643286b-654c-4e34-b10e-73d03a0f516d" width="300">
 
 # 비콘 연동 플레이어 위치 변경
-#### PlaySetting Version 0.1 -> 1로 변경
+#### PlayerSetting Version 0.1 -> 1로 변경
      /** Android에서 좌표 수신*/
       public void GetLocation()
       {
