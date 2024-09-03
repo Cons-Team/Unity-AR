@@ -109,7 +109,9 @@
 <img src="https://github.com/user-attachments/assets/8a2706af-56f3-4d14-b10a-80d790d79023" width="300">
 <img src="https://github.com/user-attachments/assets/5643286b-654c-4e34-b10e-73d03a0f516d" width="300">
 
+# 비콘 연동 플레이어 위치 변경
+#### PlaySetting Version 0.1 -> 1로 변경
+
 # 미구현 기능들
-#### 1. 비콘 연동 플레이어 위치 변경 (문수 작업중)
-#### 2. 도착시간 계산 (소현 작업중)
-#### 3. 2D 지도 전환
+#### 1. 도착시간 계산 (소현 작업중)
+#### 2. 2D 지도 전환
