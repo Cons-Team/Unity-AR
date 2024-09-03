@@ -111,6 +111,27 @@
 
 # 비콘 연동 플레이어 위치 변경
 #### PlaySetting Version 0.1 -> 1로 변경
+     /** Android에서 좌표 수신*/
+      public void GetLocation()
+      {
+          /** Android의 GetLocation 메소드로부터 좌표 수신 */
+          AndroidJavaClass ajc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+          AndroidJavaObject ajo = ajc.GetStatic<AndroidJavaObject>("currentActivity");
+          string location = ajo.Call<string>("GetLocation");
+  
+          string[] locationVector3 = location.Split(',');
+  
+          /** Indicator(플레이어) 위치 할당 */
+          indicator.transform.position = new Vector3(float.Parse(locationVector3[0]), float.Parse(locationVector3[1]), float.Parse(locationVector3[2]));
+  
+          /** Android에서 Log찍기(좌표 수신 확인용) */
+          ajo.Call("SendToastFromUnity", location);
+  
+          /** Android에서 Log찍기(Indicator에 좌표가 저장됐는지 확인용) */
+          string playerLocation = "";
+          playerLocation = indicator.transform.position + "";
+          ajo.Call("SendToastFromUnity", playerLocation);
+      }
 
 # 미구현 기능들
 #### 1. 도착시간 계산 (소현 작업중)
