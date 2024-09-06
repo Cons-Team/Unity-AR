@@ -106,7 +106,8 @@
 
 # 검색기능
 #### 검색후 목적지 변경까지 완료
-#### 이진검색색 알고리즘을 사용
+#### 이진 검색을 활용하여 검색어와 가장 가까운 시작 위치를 찾아 특정 위치를 찾아낸 다음, 그 주변에서 추가적인 일치 항목들을 검토
+#### (장점) 전체 데이터를 모두 검색하지 않고도 정확한 결과를 더 빠르게 얻을 수 있다.
 <img src="https://github.com/user-attachments/assets/8a2706af-56f3-4d14-b10a-80d790d79023" width="300">
 <img src="https://github.com/user-attachments/assets/5643286b-654c-4e34-b10e-73d03a0f516d" width="300">
 
