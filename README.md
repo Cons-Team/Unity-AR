@@ -106,6 +106,7 @@
 
 # 검색기능
 #### 검색후 목적지 변경까지 완료
+#### 선형 검색(linear search) 알고리즘을 사용
 <img src="https://github.com/user-attachments/assets/8a2706af-56f3-4d14-b10a-80d790d79023" width="300">
 <img src="https://github.com/user-attachments/assets/5643286b-654c-4e34-b10e-73d03a0f516d" width="300">
 
