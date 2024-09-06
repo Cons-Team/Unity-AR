@@ -3,66 +3,54 @@ using UnityEngine.AI;
 
 public class SetNavigationTarget : MonoBehaviour
 {
-    [SerializeField]
-    private SearchWindowManager searchWindowManager;  // 검색 창 관리 스크립트 참조
-
-    [SerializeField]
-    private LineRenderer lineRenderer;  // 경로를 표시할 LineRenderer
+    [SerializeField] private SearchWindowManager searchWindowManager; // 검색 창 관리 스크립트 참조
+    [SerializeField] private LineRenderer lineRenderer; // 경로를 표시할 LineRenderer
 
     private NavMeshPath navMeshPath;
 
     private void Start()
     {
-        // NavMeshPath 초기화
-        navMeshPath = new NavMeshPath();
+        navMeshPath = new NavMeshPath(); // NavMeshPath 초기화
     }
 
-    // 검색 창을 여는 버튼 이벤트 핸들러
+    // 검색 창을 여는 버튼 클릭 시 호출
     public void OnOpenSearchWindowButtonClicked()
     {
-        if (searchWindowManager != null)
-        {
+        if (searchWindowManager)
             searchWindowManager.OpenSearchWindow();
-        }
         else
-        {
-            Debug.LogError("SearchWindowManager is not assigned in SetNavigationTarget.");
-        }
+            Debug.LogError("SetNavigationTarget에 SearchWindowManager가 할당되지 않았습니다.");
     }
 
-    // 목표 지점을 설정하고 경로를 업데이트하는 메서드
+    // 목표 지점을 설정하고 경로를 업데이트
     public void SetTargetByObject(GameObject target)
     {
-        if (target != null)
+        if (target)
         {
             Vector3 targetPosition = target.transform.position;
             UpdatePath(targetPosition);
-            Debug.Log($"Navigation target set to: {target.name}");
+            Debug.Log($"네비게이션 목표가 설정되었습니다: {target.name}");
         }
         else
-        {
-            Debug.LogWarning("Target is null.");
-        }
+            Debug.LogWarning("목표가 없습니다.");
     }
 
-    // 경로를 업데이트하는 메서드
+    // 경로를 업데이트하고 LineRenderer를 설정
     private void UpdatePath(Vector3 targetPosition)
     {
-        // 현재 오브젝트의 위치에서 목표 지점까지의 경로 계산
+        // 현재 위치에서 목표 지점까지의 경로 계산
         NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, navMeshPath);
 
         if (navMeshPath.corners.Length > 0)
         {
-            // LineRenderer를 사용하여 경로를 표시
             lineRenderer.positionCount = navMeshPath.corners.Length;
             lineRenderer.SetPositions(navMeshPath.corners);
             lineRenderer.enabled = true;
-
-            Debug.Log("Path updated and LineRenderer set.");
+            Debug.Log("경로가 업데이트되고 LineRenderer가 설정되었습니다.");
         }
         else
         {
-            Debug.LogWarning("Failed to calculate path or path has no corners.");
+            Debug.LogWarning("경로 계산 실패 또는 경로에 코너가 없습니다.");
         }
     }
 }
