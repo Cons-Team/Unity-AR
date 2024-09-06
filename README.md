@@ -109,6 +109,46 @@
 <img src="https://github.com/user-attachments/assets/8a2706af-56f3-4d14-b10a-80d790d79023" width="300">
 <img src="https://github.com/user-attachments/assets/5643286b-654c-4e34-b10e-73d03a0f516d" width="300">
 
+    private void Search()
+        {
+            string query = searchInputField.text.ToLower();  // 검색어 가져오기
+            ClearResults();  // 이전 검색 결과 삭제
+    
+            foreach (GameObject target in navTargetObjects)
+            {
+                if (target.name.ToLower().Contains(query))
+                {
+                    // Prefab을 content에 생성하여 자동으로 배치되도록 함
+                    GameObject resultItem = Instantiate(resultPrefab, resultsScrollView.content);
+                    TextMeshProUGUI resultLabel = resultItem.GetComponentInChildren<TextMeshProUGUI>();
+    
+                    if (resultLabel != null)
+                    {
+                        resultLabel.text = target.name;  // 결과의 텍스트 설정
+                    }
+                    else
+                    {
+                        Debug.LogError("TextMeshProUGUI component is missing in the resultPrefab.");
+                        continue;  // 컴포넌트가 없으면 다음으로 넘어감
+                    }
+    
+                    Button resultButton = resultItem.GetComponent<Button>();
+                    if (resultButton != null)
+                    {
+                        resultButton.onClick.AddListener(() =>
+                        {
+                            SetTarget(target);  // 클릭 시 대상 설정
+                            CloseSearchWindow();  // 창 닫기
+                        });
+                    }
+                    else
+                    {
+                        Debug.LogError("Button component is missing in the resultPrefab.");
+                    }
+                }
+            }
+        }
+
 # 비콘 연동 플레이어 위치 변경
 #### PlayerSetting Version 0.1 -> 1로 변경
      /** Android에서 좌표 수신*/
