@@ -14,6 +14,8 @@ public class PathUpdater : MonoBehaviour
     [SerializeField] private GameObject elevatorExit1F; // 1층 엘리베이터 출구
     [SerializeField] private LineRenderer line; // 경로를 표시할 LineRenderer
     public GameObject indicator; // 플레이어 오브젝트
+    [SerializeField] private TMP_Text arrivalTimeText; // 도착 예정 시간을 표시할 텍스트
+    [SerializeField] private float movementSpeed = 0.3f; // 이동 속도
 
     private ElevatorPathHandler elevatorPathHandler;
 
@@ -33,6 +35,7 @@ public class PathUpdater : MonoBehaviour
         {
             GetLocation(); // Android에서 좌표 수신 메소드
             UpdatePath(navTargetObjects[0].transform.position);
+            UpdateArrivalTime(navTargetObjects[0].transform.position);
         }
     }
 
@@ -54,7 +57,9 @@ public class PathUpdater : MonoBehaviour
     // 목표 지점 드롭다운 값 변경 시 경로 업데이트
     private void OnTargetDropdownValueChanged(int index)
     {
-        UpdatePath(navTargetObjects[index].transform.position);
+        Vector3 targetPosition = navTargetObjects[index].transform.position;
+        UpdatePath(targetPosition);
+        UpdateArrivalTime(targetPosition); // 도착 시간 업데이트 호출
     }
 
     // 경로 옵션 드롭다운 값 변경 시 경로 업데이트
@@ -62,20 +67,35 @@ public class PathUpdater : MonoBehaviour
     {
         if (navTargetObjects.Count > 0)
         {
-            UpdatePath(navTargetObjects[targetDropdown.value].transform.position);
+            Vector3 targetPosition = navTargetObjects[targetDropdown.value].transform.position;
+            UpdatePath(targetPosition);
+            UpdateArrivalTime(targetPosition); // 도착 시간 업데이트 호출
         }
     }
 
     // 경로를 업데이트하고 경로 옵션에 따라 계단 또는 엘리베이터 경로를 설정
     private void UpdatePath(Vector3 targetPosition)
     {
-        if (pathOptionDropdown.value == 1) // 엘리베이터 옵션이 선택된 경우
+        if (pathOptionDropdown.value == 1) // 엘리베이터를 사용하는 경우
         {
             Vector3 elevatorEntry = IsOnFirstFloor(transform.position) ? elevatorEntry1F.transform.position : elevatorEntry2F.transform.position;
             Vector3 elevatorExit = IsOnFirstFloor(transform.position) ? elevatorExit2F.transform.position : elevatorExit1F.transform.position;
 
             // 엘리베이터를 사용하여 경로 계산
-            elevatorPathHandler.CalculatePathUsingElevator(transform.position, targetPosition, elevatorEntry, elevatorExit);
+            elevatorPathHandler.CalculatePathUsingElevator(transform.position, targetPosition, elevatorEntry, elevatorExit, completePath =>
+            {
+                // 엘리베이터 대기 시간 포함하여 도착 예정 시간 계산
+                elevatorPathHandler.GetElevatorTravelTime(out float elevatorTravelTime);
+                UpdateArrivalTimeWithElevator(elevatorTravelTime, completePath);
+
+                // 경로를 LineRenderer로 업데이트
+                if (line != null)
+                {
+                    line.positionCount = completePath.Count;
+                    line.SetPositions(completePath.ToArray());
+                    line.enabled = true;
+                }
+            });
         }
         else
         {
@@ -87,8 +107,11 @@ public class PathUpdater : MonoBehaviour
             {
                 line.positionCount = path.corners.Length;
                 line.SetPositions(path.corners);
+                line.enabled = true;
             }
-            line.enabled = true;
+
+            // 계단을 사용할 때의 도착 예정 시간 업데이트
+            UpdateArrivalTime(targetPosition);
         }
     }
 
@@ -116,6 +139,64 @@ public class PathUpdater : MonoBehaviour
         }
 
         UpdatePath(target.transform.position);
+        UpdateArrivalTime(target.transform.position);
+    }
+
+    private void UpdateArrivalTime(Vector3 targetPosition)
+    {
+        float totalDistance = Vector3.Distance(transform.position, targetPosition);
+        float travelTime = totalDistance / movementSpeed;
+
+        
+        if (pathOptionDropdown.value == 0)
+        {
+            // 계단을 사용할 때
+            float estimatedArrivalTime = Time.time + travelTime;
+            System.DateTime arrivalTime = System.DateTime.Now.AddSeconds(travelTime);
+            int minutes = Mathf.FloorToInt(travelTime / 60);
+            int seconds = Mathf.FloorToInt(travelTime % 60);
+
+            if (arrivalTimeText != null)
+            {
+                arrivalTimeText.text = $"도착 예정 시간: {minutes}분 {seconds}초 후";
+            }
+
+            // 디버그 로그 추가
+            Debug.Log($"도착 예정 시간 업데이트: 목표 지점: {targetPosition}, 총 거리: {totalDistance}, 이동 시간: {travelTime}, 도착 예정 시간: {minutes}분 {seconds}초 후");
+        }
+    }
+
+    public void UpdateArrivalTimeWithElevator(float elevatorWaitTime, List<Vector3> completePath)
+    {
+        if (completePath == null || completePath.Count == 0)
+        {
+            Debug.LogWarning("경로가 비어있거나 null입니다.");
+            return;
+        }
+
+        // 전체 거리 계산
+        float totalDistance = 0f;
+        for (int i = 0; i < completePath.Count - 1; i++)
+        {
+            totalDistance += Vector3.Distance(completePath[i], completePath[i + 1]);
+        }
+
+        // 이동 시간 계산
+        float travelTime = totalDistance / movementSpeed;
+        float totalTravelTime = travelTime + elevatorWaitTime;
+
+        // 현재 시간에 이동 시간과 대기 시간을 더하여 도착 예정 시간 계산
+        int minutes = Mathf.FloorToInt(totalTravelTime / 60);
+        int seconds = Mathf.FloorToInt(totalTravelTime % 60);
+
+        if (arrivalTimeText != null)
+        {
+            arrivalTimeText.text = $"도착 예정 시간: {minutes}분 {seconds}초 후";
+        }
+
+        // 디버그 로그 추가
+        string finalDestination = completePath.Count > 0 ? $"({completePath[completePath.Count - 1].x}, {completePath[completePath.Count - 1].y}, {completePath[completePath.Count - 1].z})" : "없음";
+        Debug.Log($"도착 예정 시간 업데이트: 목표 지점: {finalDestination}, 총 거리: {totalDistance}, 이동 시간: {travelTime}초, 엘리베이터 대기 시간: {elevatorWaitTime}초, 도착 예정 시간: {minutes}분 {seconds}초 후");
     }
 
     // Android에서 좌표 수신
