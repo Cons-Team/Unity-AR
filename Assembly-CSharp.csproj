@@ -1197,6 +1197,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Nobi.UiRoundedCorners.Editor.csproj">
+      <Project>{09E80CD2-86B7-E239-9DAC-A14A6F52CC49}</Project>
+      <Name>Nobi.UiRoundedCorners.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="Nobi.UiRoundedCorners.csproj">
+      <Project>{4D9C0504-DB16-AFF0-C8EF-A44F5325F68E}</Project>
+      <Name>Nobi.UiRoundedCorners</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
