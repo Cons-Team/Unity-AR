@@ -193,8 +193,43 @@
         ajo.Call("SendToastFromUnity", playerLocation);
     }
 
+# 도착시간 계산
+#### 이동 거리와 이동 속도, 엘리베이터 대기 시간을 고려하여 도착 시간을 예측 -> 두 가지 경우를 고려 ( 엘리베이터 / 계단 )
+    public void UpdateArrivalTimeWithElevator(float elevatorWaitTime, List<Vector3> completePath)
+    {
+        if (completePath == null || completePath.Count == 0)
+        {
+            Debug.LogWarning("경로가 비어있거나 null입니다.");
+            return;
+        }
+    
+        // 전체 거리 계산
+        float totalDistance = 0f;
+        for (int i = 0; i < completePath.Count - 1; i++)
+        {
+            totalDistance += Vector3.Distance(completePath[i], completePath[i + 1]);
+        }
+    
+        // 이동 시간 계산
+        float travelTime = totalDistance / movementSpeed;
+        float totalTravelTime = travelTime + elevatorWaitTime;
+    
+        // 도착 예정 시간 계산
+        int minutes = Mathf.FloorToInt(totalTravelTime / 60);
+        int seconds = Mathf.FloorToInt(totalTravelTime % 60);
+    
+        // 도착 예정 시간 텍스트 업데이트
+        if (arrivalTimeText != null)
+        {
+            arrivalTimeText.text = $"도착 예정 시간: {minutes}분 {seconds}초 후";
+        }
+    
+        // 디버그 로그 추가
+        string finalDestination = completePath.Count > 0 ? $"({completePath[completePath.Count - 1].x}, {completePath[completePath.Count - 1].y}, {completePath[completePath.Count - 1].z})" : "없음";
+        Debug.Log($"도착 예정 시간 업데이트: 목표 지점: {finalDestination}, 총 거리: {totalDistance}, 이동 시간: {travelTime}초, 엘리베이터 대기 시간: {elevatorWaitTime}초, 도착 예정 시간: {minutes}분 {seconds}초 후");
+    }
+
 # 미구현 기능들
-#### 1. 도착시간 계산 (소현 작업중)
-#### 2. 2D 지도 전환
-#### 3. 이벤트 + 상점 정보 표시
-#### 4. 도움벨
+#### 1. 2D 지도 전환
+#### 2. 이벤트 + 상점 정보 표시
+#### 3. 도움벨
