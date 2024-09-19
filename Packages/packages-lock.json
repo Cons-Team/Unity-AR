@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.nobi.roundedcorners": {
-      "version": "file:C:/Users/namhu/Downloads/Unity-UI-Rounded-Corners-master",
+      "version": "file:../Assets/Unity-UI-Rounded-Corners-master",
       "depth": 0,
       "source": "local",
       "dependencies": {}
