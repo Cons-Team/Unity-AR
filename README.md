@@ -7,7 +7,11 @@
 </p>
 
 # 구현된 앱 화면
-<img src="https://github.com/user-attachments/assets/0b57d7f4-4a50-4b40-b351-23c1b7a6a452" width="300">
+<p style="float:left">
+  <img src="https://github.com/user-attachments/assets/0b57d7f4-4a50-4b40-b351-23c1b7a6a452" width="300">
+  <img src="https://github.com/user-attachments/assets/837bbfed-c9c8-4b17-9f6a-1d3290b7cb87" width="300">
+  <img src="https://github.com/user-attachments/assets/c30804fb-447e-4b95-8b13-1a06a771b7d3" width="300">
+</p>
 
 # 3층, 4층 구분
     // 현재 위치가 3층에 있는지 확인
