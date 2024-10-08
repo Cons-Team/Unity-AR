@@ -18,6 +18,7 @@ public class PathUpdater : MonoBehaviour
     [SerializeField] private float movementSpeed = 0.3f; // 이동 속도
 
     private ElevatorPathHandler elevatorPathHandler;
+    float maxDistance = 6.0f;
 
     private void Start()
     {
@@ -105,8 +106,26 @@ public class PathUpdater : MonoBehaviour
 
             if (path.corners.Length > 0)
             {
-                line.positionCount = path.corners.Length;
-                line.SetPositions(path.corners);
+                List<Vector3> validCorners = new List<Vector3>();
+
+                // 경로 업데이트 시 좌표 사이의 거리 확인
+                for (int i = 0; i < path.corners.Length - 1; i++)
+                {
+                    if (Vector3.Distance(path.corners[i], path.corners[i + 1]) > maxDistance) // maxDistance값으로 렌더러 길이 제한
+                    {
+                        Debug.LogWarning("경로가 너무 깁니다. 잘못된 경로 제거");
+                        continue;
+                    }
+                    // 정상 경로만 리스트에 추가
+                    validCorners.Add(path.corners[i]);
+                }
+
+                // 마지막 점 추가
+                validCorners.Add(path.corners[path.corners.Length - 1]);
+
+                // 유효한 경로를 LineRenderer에 적용
+                line.positionCount = validCorners.Count;
+                line.SetPositions(validCorners.ToArray());
                 line.enabled = true;
             }
 
@@ -132,12 +151,27 @@ public class PathUpdater : MonoBehaviour
     {
         Debug.Log($"목표가 설정되었습니다: {target.name}");
 
+        // 모든 목표 오브젝트 중 선택된 목표만 활성화
+        for (int i = 0; i < navTargetObjects.Count; i++)
+        {
+            if (navTargetObjects[i] == target)
+            {
+                navTargetObjects[i].SetActive(true);  // 선택된 목표 활성화
+            }
+            else
+            {
+                navTargetObjects[i].SetActive(false); // 나머지 목표 비활성화
+            }
+        }
+
+        // 드롭다운에서 해당 목표 지점 선택
         int index = navTargetObjects.IndexOf(target);
         if (index >= 0)
         {
             targetDropdown.value = index;
         }
 
+        // 경로 및 도착 시간 업데이트
         UpdatePath(target.transform.position);
         UpdateArrivalTime(target.transform.position);
     }
