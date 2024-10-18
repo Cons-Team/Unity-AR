@@ -233,7 +233,9 @@
         Debug.Log($"도착 예정 시간 업데이트: 목표 지점: {finalDestination}, 총 거리: {totalDistance}, 이동 시간: {travelTime}초, 엘리베이터 대기 시간: {elevatorWaitTime}초, 도착 예정 시간: {minutes}분 {seconds}초 후");
     }
 
+# 2D 지도 전환
+#### 2DMAP <-> AR 전환 가능
+
 # 미구현 기능들
-#### 1. 2D 지도 전환 (작업중)
-#### 2. 이벤트 + 상점 정보 표시
-#### 3. 도움벨
+#### 1. 이벤트 + 상점 정보 표시
+#### 2. 도움벨
