@@ -17,6 +17,7 @@ public class PathUpdater : MonoBehaviour
     [SerializeField] private TMP_Text arrivalTimeText; // 도착 예정 시간을 표시할 텍스트
     [SerializeField] private float movementSpeed = 0.3f; // 이동 속도
 
+    private bool isPathActive = false; // 경로 활성화 여부 확인
     private ElevatorPathHandler elevatorPathHandler;
     float maxDistance = 6.0f;
 
@@ -132,6 +133,7 @@ public class PathUpdater : MonoBehaviour
             // 계단을 사용할 때의 도착 예정 시간 업데이트
             UpdateArrivalTime(targetPosition);
         }
+        isPathActive = true;
     }
 
     // 현재 위치가 1층에 있는지 확인
@@ -231,6 +233,25 @@ public class PathUpdater : MonoBehaviour
         // 디버그 로그 추가
         string finalDestination = completePath.Count > 0 ? $"({completePath[completePath.Count - 1].x}, {completePath[completePath.Count - 1].y}, {completePath[completePath.Count - 1].z})" : "없음";
         Debug.Log($"도착 예정 시간 업데이트: 목표 지점: {finalDestination}, 총 거리: {totalDistance}, 이동 시간: {travelTime}초, 엘리베이터 대기 시간: {elevatorWaitTime}초, 도착 예정 시간: {minutes}분 {seconds}초 후");
+    }
+
+    // 목적지 취소 시 경로 안내 중지
+    public void CancelNavigation()
+    {
+        // 경로 안내 비활성화
+        isPathActive = false;
+
+        // LineRenderer 경로 비활성화
+        line.positionCount = 0;
+        line.enabled = false;
+
+        // 도착 예정 시간 텍스트 비우기
+        if (arrivalTimeText != null)
+        {
+            arrivalTimeText.text = "경로 안내 취소됨";
+        }
+
+        Debug.Log("경로 안내가 취소되었습니다.");
     }
 
     // Android에서 좌표 수신
